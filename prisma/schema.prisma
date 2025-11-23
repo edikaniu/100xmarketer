@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") // Uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Uses a direct connection
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  image     String?
+  role      String   @default("USER") // USER, ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tools     Tool[]
+  prompts   Prompt[]
+  workflows Workflow[]
+  reviews   Review[]
+}
+
+model Tool {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  image       String
+  url         String
+  category    String
+  pricing     String?
+  rating      Float    @default(0)
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  authorId    String?
+  author      User?    @relation(fields: [authorId], references: [id])
+  reviews     Review[]
+}
+
+model Prompt {
+  id            String   @id @default(cuid())
+  title         String
+  description   String
+  content       String   @db.Text
+  category      String
+  categoryColor String?
+  likes         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  authorId      String?
+  author        User?    @relation(fields: [authorId], references: [id])
+}
+
+model Workflow {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  tools       String[]
+  category    String
+  rating      Float    @default(0)
+  colorFrom   String?
+  colorTo     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  authorId    String?
+  author      User?    @relation(fields: [authorId], references: [id])
+}
+
+model CaseStudy {
+  id           String   @id @default(cuid())
+  title        String
+  description  String
+  image        String
+  category     String
+  categoryColor String?
+  metric       String?
+  company      String?
+  readTime     String?
+  gradientFrom String?
+  gradientTo   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String   @db.Text
+  pros      String[]
+  cons      String[]
+  helpful   Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  toolId    String
+  tool      Tool     @relation(fields: [toolId], references: [id])
+}
+
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  image       String
+  source      String
+  category    String
+  url         String?
+  isBreaking  Boolean  @default(false)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

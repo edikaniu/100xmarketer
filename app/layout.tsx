@@ -1,3 +1,4 @@
+import { ClerkProvider } from '@clerk/nextjs'
 import type { Metadata } from "next";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
@@ -15,17 +16,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="bg-gray-50">
-        <SidebarProvider>
-          <div className="flex h-screen bg-gray-50">
-            <Sidebar />
-            <MainContent>
-              {children}
-            </MainContent>
-          </div>
-        </SidebarProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={` antialiased`}
+        >
+          <SidebarProvider>
+            <div className="flex min-h-screen bg-gray-50">
+              <Sidebar />
+              <MainContent>
+                {children}
+              </MainContent>
+            </div>
+          </SidebarProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
