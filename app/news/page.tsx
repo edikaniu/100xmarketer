@@ -1,7 +1,6 @@
-'use client';
-
 import Header from '@/components/Header';
 import NewsCard from '@/components/NewsCard';
+import { prisma } from '@/lib/db';
 import {
     Newspaper,
     Zap,
@@ -10,74 +9,61 @@ import {
     Filter
 } from 'lucide-react';
 import { clsx } from 'clsx';
-import { useState } from 'react';
+import Link from 'next/link';
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
 
 const categories = [
-    { name: 'All News', icon: Newspaper, active: true },
-    { name: 'Breaking', icon: Zap, active: false },
-    { name: 'Industry', icon: TrendingUp, active: false },
-    { name: 'Research', icon: FlaskConical, active: false },
+    { name: 'All News', icon: Newspaper },
+    { name: 'Breaking', icon: Zap },
+    { name: 'Industry', icon: TrendingUp },
+    { name: 'Research', icon: FlaskConical },
 ];
 
-const newsItems = [
-    {
-        title: 'OpenAI Releases GPT-5 with Enhanced Marketing Capabilities',
-        description: 'New model shows 40% improvement in campaign optimization tasks and content generation speed.',
-        image: 'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800',
-        category: 'Breaking',
-        source: 'TechCrunch',
-        time: '2 hours ago',
-        isBreaking: true
-    },
-    {
-        title: 'AI Tool Adoption Reaches 78% Among Marketing Teams',
-        description: 'Latest survey reveals significant shift in marketing automation and budget allocation for AI tools.',
-        image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800',
-        category: 'Industry',
-        source: 'Marketing Week',
-        time: '4 hours ago',
-        isBreaking: false
-    },
-    {
-        title: 'Google Announces New AI Features for Ads Platform',
-        description: 'Automated asset creation and performance prediction coming to Google Ads next month.',
-        image: 'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800',
-        category: 'Industry',
-        source: 'Google Blog',
-        time: '6 hours ago',
-        isBreaking: false
-    },
-    {
-        title: 'DeepMind Publishes Research on Consumer Behavior Prediction',
-        description: 'New algorithm predicts purchase intent with 92% accuracy using minimal data points.',
-        image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
-        category: 'Research',
-        source: 'Nature Machine Intelligence',
-        time: '12 hours ago',
-        isBreaking: false
-    },
-    {
-        title: 'Midjourney V7 Alpha Testing Begins',
-        description: 'Select users report photorealistic text rendering and improved composition controls.',
-        image: 'https://images.pexels.com/photos/326503/pexels-photo-326503.jpeg?auto=compress&cs=tinysrgb&w=800',
-        category: 'Breaking',
-        source: 'The Verge',
-        time: '1 day ago',
-        isBreaking: true
-    },
-    {
-        title: 'The State of AI Marketing 2025 Report',
-        description: 'Comprehensive analysis of trends, spending, and ROI across 5,000 companies.',
-        image: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800',
-        category: 'Industry',
-        source: 'Forrester',
-        time: '1 day ago',
-        isBreaking: false
-    }
-];
+function getRelativeTime(date: Date) {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-export default function NewsPage() {
-    const [activeCategory, setActiveCategory] = useState('All News');
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+    return date.toLocaleDateString();
+}
+
+interface NewsPageProps {
+    searchParams: {
+        category?: string;
+    };
+}
+
+export default async function NewsPage({ searchParams }: NewsPageProps) {
+    const activeCategory = searchParams.category || 'All News';
+
+    // Build where clause based on category
+    const where = activeCategory !== 'All News' ? {
+        category: activeCategory
+    } : {};
+
+    // Fetch news from database
+    const newsItems = await prisma.news.findMany({
+        where,
+        orderBy: {
+            publishedAt: 'desc'
+        }
+    });
+
+    // Transform news to match NewsCard props
+    const formattedNews = newsItems.map(item => ({
+        title: item.title,
+        description: item.description,
+        image: item.image,
+        category: item.category,
+        source: item.source,
+        time: getRelativeTime(item.publishedAt),
+        isBreaking: item.isBreaking
+    }));
 
     return (
         <>
@@ -91,9 +77,9 @@ export default function NewsPage() {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sm:mb-8">
                     <div className="flex gap-2 overflow-x-auto pb-2 w-full sm:w-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
                         {categories.map((cat) => (
-                            <button
+                            <Link
                                 key={cat.name}
-                                onClick={() => setActiveCategory(cat.name)}
+                                href={`/news?category=${encodeURIComponent(cat.name)}`}
                                 className={clsx(
                                     'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap flex-shrink-0',
                                     activeCategory === cat.name
@@ -103,7 +89,7 @@ export default function NewsPage() {
                             >
                                 <cat.icon className="w-4 h-4" />
                                 <span>{cat.name}</span>
-                            </button>
+                            </Link>
                         ))}
                     </div>
                     <div className="flex gap-3 w-full sm:w-auto">
@@ -116,7 +102,7 @@ export default function NewsPage() {
 
                 {/* News Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    {newsItems.map((news, index) => (
+                    {formattedNews.map((news, index) => (
                         <NewsCard key={index} {...news} />
                     ))}
                 </div>

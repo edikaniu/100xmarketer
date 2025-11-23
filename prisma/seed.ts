@@ -11,7 +11,19 @@ const tools = [
         rating: 4.8,
         url: 'https://chat.openai.com',
         pricing: 'Freemium',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '1.2K',
+        colorFrom: 'from-teal-600',
+        colorTo: 'to-teal-800',
+        features: {
+            model: 'GPT-4',
+            content: 'Text, Code',
+            api: true,
+            collab: true,
+            training: false,
+            speed: 'Fast',
+            trial: 'Free Tier'
+        }
     },
     {
         name: 'Midjourney',
@@ -21,7 +33,10 @@ const tools = [
         rating: 4.7,
         url: 'https://midjourney.com',
         pricing: 'Paid',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '980',
+        colorFrom: 'from-purple-600',
+        colorTo: 'to-purple-800'
     },
     {
         name: 'Copy.ai',
@@ -31,7 +46,10 @@ const tools = [
         rating: 4.6,
         url: 'https://copy.ai',
         pricing: 'Freemium',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '750',
+        colorFrom: 'from-blue-600',
+        colorTo: 'to-blue-800'
     },
     {
         name: 'Descript',
@@ -41,7 +59,10 @@ const tools = [
         rating: 4.9,
         url: 'https://descript.com',
         pricing: 'Freemium',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '1.1K',
+        colorFrom: 'from-pink-600',
+        colorTo: 'to-pink-800'
     },
     {
         name: 'Jasper',
@@ -51,7 +72,10 @@ const tools = [
         rating: 4.7,
         url: 'https://jasper.ai',
         pricing: 'Paid',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '890',
+        colorFrom: 'from-green-600',
+        colorTo: 'to-green-800'
     },
     {
         name: 'Synthesia',
@@ -61,7 +85,10 @@ const tools = [
         rating: 4.8,
         url: 'https://synthesia.io',
         pricing: 'Paid',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '650',
+        colorFrom: 'from-indigo-600',
+        colorTo: 'to-indigo-800'
     },
     {
         name: 'Runway',
@@ -71,7 +98,10 @@ const tools = [
         rating: 4.7,
         url: 'https://runwayml.com',
         pricing: 'Freemium',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '920',
+        colorFrom: 'from-cyan-600',
+        colorTo: 'to-cyan-800'
     },
     {
         name: 'ElevenLabs',
@@ -81,7 +111,10 @@ const tools = [
         rating: 4.8,
         url: 'https://elevenlabs.io',
         pricing: 'Freemium',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '1.3K',
+        colorFrom: 'from-amber-600',
+        colorTo: 'to-amber-800'
     },
     {
         name: 'Perplexity AI',
@@ -91,7 +124,10 @@ const tools = [
         rating: 4.6,
         url: 'https://perplexity.ai',
         pricing: 'Freemium',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '1.0K',
+        colorFrom: 'from-violet-600',
+        colorTo: 'to-violet-800'
     },
     {
         name: 'Claude',
@@ -101,7 +137,10 @@ const tools = [
         rating: 4.9,
         url: 'https://anthropic.com/claude',
         pricing: 'Freemium',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '1.5K',
+        colorFrom: 'from-orange-600',
+        colorTo: 'to-orange-800'
     },
     {
         name: 'Google Gemini',
@@ -111,7 +150,10 @@ const tools = [
         rating: 4.7,
         url: 'https://gemini.google.com',
         pricing: 'Freemium',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '1.1K',
+        colorFrom: 'from-red-600',
+        colorTo: 'to-red-800'
     },
     {
         name: 'Notion AI',
@@ -121,7 +163,19 @@ const tools = [
         rating: 4.7,
         url: 'https://notion.so',
         pricing: 'Paid',
-        isVerified: true
+        isVerified: true,
+        reviewsCount: '2.5K',
+        colorFrom: 'from-slate-600',
+        colorTo: 'to-slate-800',
+        features: {
+            model: 'GPT-4',
+            content: 'Text, Code',
+            api: true,
+            collab: true,
+            training: false,
+            speed: 'Fast',
+            trial: 'Free Tier'
+        }
     }
 ]
 
@@ -252,6 +306,7 @@ const newsItems = [
         image: 'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800',
         category: 'Breaking',
         source: 'TechCrunch',
+        url: 'https://techcrunch.com/gpt5-release',
         isBreaking: true
     },
     {
@@ -260,6 +315,7 @@ const newsItems = [
         image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800',
         category: 'Industry',
         source: 'Marketing Week',
+        url: 'https://marketingweek.com/ai-adoption',
         isBreaking: false
     },
     {
@@ -268,6 +324,7 @@ const newsItems = [
         image: 'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800',
         category: 'Industry',
         source: 'Google Blog',
+        url: 'https://blog.google/ads-ai-features',
         isBreaking: false
     },
     {
@@ -276,6 +333,7 @@ const newsItems = [
         image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=800',
         category: 'Research',
         source: 'Nature Machine Intelligence',
+        url: 'https://nature.com/deepmind-research',
         isBreaking: false
     },
     {
@@ -284,6 +342,7 @@ const newsItems = [
         image: 'https://images.pexels.com/photos/326503/pexels-photo-326503.jpeg?auto=compress&cs=tinysrgb&w=800',
         category: 'Breaking',
         source: 'The Verge',
+        url: 'https://theverge.com/midjourney-v7',
         isBreaking: true
     },
     {
@@ -292,6 +351,7 @@ const newsItems = [
         image: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800',
         category: 'Industry',
         source: 'Forrester',
+        url: 'https://forrester.com/ai-marketing-2025',
         isBreaking: false
     }
 ]
@@ -362,42 +422,157 @@ const caseStudies = [
 async function main() {
     console.log('Start seeding...')
 
+    // Create Default User
+    const user = await prisma.user.upsert({
+        where: { email: 'demo@100xmarketer.com' },
+        update: {},
+        create: {
+            email: 'demo@100xmarketer.com',
+            name: 'Demo User',
+            clerkId: 'user_2b...',
+            image: 'https://i.pravatar.cc/150?u=demo',
+            role: 'ADMIN'
+        }
+    });
+
     // Seed Tools
     for (const tool of tools) {
         await prisma.tool.create({
-            data: tool,
+            data: {
+                name: tool.name,
+                category: tool.category,
+                description: tool.description,
+                image: tool.image,
+                rating: tool.rating,
+                url: tool.url,
+                pricing: tool.pricing,
+                isVerified: tool.isVerified,
+                reviewsCount: tool.reviewsCount,
+                colorFrom: tool.colorFrom,
+                colorTo: tool.colorTo,
+                features: (tool as any).features || undefined,
+                authorId: user.id
+            },
         })
     }
 
     // Seed Prompts
     for (const prompt of prompts) {
         await prisma.prompt.create({
-            data: prompt,
+            data: {
+                title: prompt.title,
+                description: prompt.description,
+                content: prompt.content,
+                category: prompt.category,
+                categoryColor: prompt.categoryColor,
+                authorId: user.id,
+                likes: Math.floor(Math.random() * 500) + 50
+            },
         })
     }
 
     // Seed Workflows
     for (const workflow of workflows) {
         await prisma.workflow.create({
-            data: workflow,
+            data: {
+                title: workflow.title,
+                description: workflow.description,
+                tools: workflow.tools,
+                category: workflow.category,
+                rating: workflow.rating,
+                colorFrom: workflow.colorFrom,
+                colorTo: workflow.colorTo
+            },
         })
     }
 
     // Seed News
     for (const news of newsItems) {
         await prisma.news.create({
-            data: news,
+            data: {
+                title: news.title,
+                description: news.description,
+                image: news.image,
+                source: news.source,
+                category: news.category,
+                url: news.url,
+                isBreaking: news.isBreaking
+            },
         })
     }
 
     // Seed Case Studies
     for (const study of caseStudies) {
         await prisma.caseStudy.create({
-            data: study,
+            data: {
+                title: study.title,
+                description: study.description,
+                image: study.image,
+                category: study.category,
+                categoryColor: study.categoryColor,
+                gradientFrom: study.gradientFrom,
+                gradientTo: study.gradientTo,
+                readTime: study.readTime
+            },
         })
     }
 
     console.log('Seeding finished.')
+
+    // Seed Reviews
+    const allTools = await prisma.tool.findMany();
+
+    const reviewData = [
+        {
+            rating: 5,
+            comment: 'ChatGPT has completely transformed how we approach content creation. The ability to brainstorm ideas and generate outlines in seconds is invaluable.',
+            pros: ['Fast generation', 'Versatile', 'Easy to use'],
+            cons: ['Occasional inaccuracies', 'Requires fact-checking'],
+            helpful: 24,
+            toolName: 'ChatGPT'
+        },
+        {
+            rating: 4,
+            comment: 'Great tool but needs specific prompting. It is powerful, but you really need to know how to prompt it correctly to get the best results.',
+            pros: ['Powerful logic', 'Good for coding'],
+            cons: ['Learning curve for prompts'],
+            helpful: 12,
+            toolName: 'ChatGPT'
+        },
+        {
+            rating: 5,
+            comment: 'Midjourney creates the most stunning images I have ever seen from AI. The detail and artistic quality are unmatched.',
+            pros: ['Incredible quality', 'Artistic styles', 'Community feed'],
+            cons: ['Discord interface is clunky', 'No free trial'],
+            helpful: 45,
+            toolName: 'Midjourney'
+        },
+        {
+            rating: 4,
+            comment: 'Good for quick mockups but struggles with text in images.',
+            pros: ['Fast', 'Good variety'],
+            cons: ['Text rendering', 'Inconsistent faces'],
+            helpful: 8,
+            toolName: 'Midjourney'
+        }
+    ];
+
+    for (const review of reviewData) {
+        const tool = allTools.find((t: any) => t.name === review.toolName);
+        if (tool) {
+            await prisma.review.create({
+                data: {
+                    rating: review.rating,
+                    comment: review.comment,
+                    pros: review.pros,
+                    cons: review.cons,
+                    helpful: review.helpful,
+                    userId: user.id,
+                    toolId: tool.id
+                }
+            });
+        }
+    }
 }
 
 main()

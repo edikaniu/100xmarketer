@@ -1,76 +1,76 @@
-'use client';
-
 import Header from '@/components/Header';
 import PromptCard from '@/components/PromptCard';
+import PromptsSearchBar from '@/components/PromptsSearchBar';
+import { prisma } from '@/lib/db';
 import {
     Layers,
     PenTool,
     Megaphone,
     Code,
     Palette,
-    Briefcase,
-    Sparkles,
-    ArrowRight
+    Briefcase
 } from 'lucide-react';
+import Link from 'next/link';
+import { clsx } from 'clsx';
 
-const prompts = [
-    {
-        title: 'AI Waitlist Generator',
-        description: 'Create an intelligent waitlist form in minutes.',
-        authorName: 'Alex Chen',
-        authorImage: 'https://i.pravatar.cc/40?u=alex',
-        category: 'Writing',
-        categoryColor: 'bg-purple-100 text-purple-700',
-        likes: 234
-    },
-    {
-        title: 'AI Sentence Expander',
-        description: 'Take short, simple text and develop it into polished, well-structured content.',
-        authorName: 'Jordan Smith',
-        authorImage: 'https://i.pravatar.cc/40?u=jordan',
-        category: 'Content',
-        categoryColor: 'bg-blue-100 text-blue-700',
-        likes: 189
-    },
-    {
-        title: 'AI Sentence Rewriter',
-        description: 'Struggling to make your sentences flow or hit the right tone?',
-        authorName: 'Casey Williams',
-        authorImage: 'https://i.pravatar.cc/40?u=casey',
-        category: 'Editing',
-        categoryColor: 'bg-green-100 text-green-700',
-        likes: 156
-    },
-    {
-        title: 'AI Presentation Maker',
-        description: 'Revolutionize your workflow with our AI presentation maker.',
-        authorName: 'Morgan Lee',
-        authorImage: 'https://i.pravatar.cc/40?u=morgan',
-        category: 'Design',
-        categoryColor: 'bg-orange-100 text-orange-700',
-        likes: 312
-    },
-    {
-        title: 'AI Email Composer',
-        description: 'Generate professional emails tailored to any situation or context.',
-        authorName: 'Taylor Brown',
-        authorImage: 'https://i.pravatar.cc/40?u=taylor',
-        category: 'Communication',
-        categoryColor: 'bg-pink-100 text-pink-700',
-        likes: 267
-    },
-    {
-        title: 'AI Code Generator',
-        description: 'Write clean, efficient code snippets for any programming language.',
-        authorName: 'Alex Rivera',
-        authorImage: 'https://i.pravatar.cc/40?u=alex2',
-        category: 'Development',
-        categoryColor: 'bg-indigo-100 text-indigo-700',
-        likes: 428
-    }
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
+const categories = [
+    { name: 'All Prompts', icon: Layers, value: '' },
+    { name: 'Writing', icon: PenTool, value: 'Writing' },
+    { name: 'Content', icon: Megaphone, value: 'Content' },
+    { name: 'Development', icon: Code, value: 'Development' },
+    { name: 'Design', icon: Palette, value: 'Design' },
+    { name: 'Communication', icon: Briefcase, value: 'Communication' },
 ];
 
-export default function PromptsPage() {
+interface PromptsPageProps {
+    searchParams: {
+        category?: string;
+        search?: string;
+    };
+}
+
+export default async function PromptsPage({ searchParams }: PromptsPageProps) {
+    const { category, search } = searchParams;
+
+    // Build where clause for filtering
+    const where: any = {};
+
+    if (category) {
+        where.category = category;
+    }
+
+    if (search) {
+        where.OR = [
+            { title: { contains: search, mode: 'insensitive' } },
+            { description: { contains: search, mode: 'insensitive' } }
+        ];
+    }
+
+    // Fetch prompts from database with filters
+    const prompts = await prisma.prompt.findMany({
+        where,
+        include: {
+            author: true
+        },
+        orderBy: {
+            likes: 'desc'
+        }
+    });
+
+    // Transform prompts to match PromptCard props
+    const formattedPrompts = prompts.map(prompt => ({
+        title: prompt.title,
+        description: prompt.description,
+        authorName: prompt.author?.name || 'Unknown Author',
+        authorImage: prompt.author?.image || 'https://i.pravatar.cc/150?u=unknown',
+        category: prompt.category,
+        categoryColor: prompt.categoryColor || 'bg-gray-100 text-gray-700',
+        likes: prompt.likes
+    }));
+
     return (
         <>
             <Header
@@ -80,59 +80,52 @@ export default function PromptsPage() {
 
             <div className="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8">
                 {/* Filter Section */}
-                <section id="section-filters" className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
-                    {[
-                        { name: 'All Prompts', icon: Layers, active: true },
-                        { name: 'Copywriting', icon: PenTool, active: false },
-                        { name: 'Social Media', icon: Megaphone, active: false },
-                        { name: 'SEO', icon: Code, active: false },
-                        { name: 'Email', icon: Palette, active: false },
-                        { name: 'Strategy', icon: Briefcase, active: false },
-                    ].map((category) => (
-                        <button
-                            key={category.name}
-                            className={`
-                flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all flex-shrink-0
-                ${category.active
-                                    ? 'bg-purple-600 text-white shadow-md'
-                                    : 'bg-white text-gray-600 border border-gray-200 hover:border-purple-200 hover:bg-purple-50'
-                                }
-              `}
-                        >
-                            <category.icon className={`w-4 h-4 ${category.active ? 'text-white' : 'text-gray-500'}`} />
-                            {category.name}
-                        </button>
-                    ))}
-                </section>
-
-                {/* Popular Prompts */}
-                <section id="section-prompts-grid">
-                    <div className="flex items-center justify-between mb-4 sm:mb-6">
-                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
-                            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 fill-yellow-500" />
-                            Popular Prompts
-                        </h3>
-                        <button className="text-purple-600 text-xs sm:text-sm font-semibold hover:text-purple-700 flex items-center gap-1">
-                            View All <ArrowRight className="w-4 h-4" />
-                        </button>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                        {prompts.map((prompt) => (
-                            <PromptCard key={prompt.title} {...prompt} />
+                <section className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 w-full sm:w-auto">
+                        {categories.map((cat) => (
+                            <Link
+                                key={cat.name}
+                                href={`/prompts${cat.value ? `?category=${encodeURIComponent(cat.value)}` : ''}${search ? `${cat.value ? '&' : '?'}search=${encodeURIComponent(search)}` : ''}`}
+                                className={clsx(
+                                    'flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all flex-shrink-0',
+                                    (category === cat.value || (!category && !cat.value))
+                                        ? 'bg-purple-600 text-white shadow-md'
+                                        : 'bg-white text-gray-600 border border-gray-200 hover:border-purple-200 hover:bg-purple-50'
+                                )}
+                            >
+                                <cat.icon className={clsx('w-4 h-4', (category === cat.value || (!category && !cat.value)) ? 'text-white' : 'text-gray-500')} />
+                                {cat.name}
+                            </Link>
                         ))}
                     </div>
+                    <PromptsSearchBar />
                 </section>
 
-                {/* Load More */}
-                <div className="flex justify-center pt-4">
-                    <button className="px-8 py-3 border-2 border-purple-600 text-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition-all w-full sm:w-auto">Load More Prompts</button>
-                </div>
+                {/* Results Count */}
+                {(search || category) && (
+                    <div className="text-sm text-gray-600">
+                        Found <span className="font-bold text-gray-900">{formattedPrompts.length}</span> prompts
+                        {search && <> matching "<span className="font-semibold">{search}</span>"</>}
+                        {category && <> in <span className="font-semibold">{category}</span></>}
+                    </div>
+                )}
 
-                {/* CTA Section */}
-                <section id="section-cta-prompts" className="bg-gradient-to-br from-purple-900 to-indigo-900 text-white rounded-2xl p-6 sm:p-10 text-center shadow-lg">
-                    <h3 className="text-xl sm:text-2xl font-bold mb-3 tracking-tight">Submit Your Own Prompt</h3>
-                    <p className="text-purple-200 mb-6 sm:mb-7 text-sm sm:text-base">Share your best prompts with the community and earn rewards</p>
-                    <button className="bg-white text-purple-900 px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-gray-50 transition-all w-full sm:w-auto">Submit Prompt</button>
+                {/* Prompts Grid */}
+                <section id="section-prompts-grid">
+                    {formattedPrompts.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                            {formattedPrompts.map((prompt, index) => (
+                                <PromptCard key={index} {...prompt} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-20 bg-gray-50 rounded-xl border border-gray-200">
+                            <p className="text-gray-500 mb-2">No prompts found</p>
+                            <Link href="/prompts" className="text-purple-600 font-semibold hover:underline">
+                                Clear filters
+                            </Link>
+                        </div>
+                    )}
                 </section>
             </div>
         </>
