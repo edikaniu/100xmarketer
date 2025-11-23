@@ -1,6 +1,5 @@
-'use client';
-
-import { Search, Bell } from 'lucide-react';
+import { Search, Bell, User } from 'lucide-react';
+import MobileMenuButton from './MobileMenuButton';
 
 interface HeaderProps {
     title: string;
@@ -9,31 +8,42 @@ interface HeaderProps {
 
 export default function Header({ title, description }: HeaderProps) {
     return (
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-            <div className="px-8 py-5 flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">{title}</h1>
-                    <p className="text-gray-600 text-sm mt-0.5">{description}</p>
-                </div>
-                <div className="flex items-center gap-4">
-                    <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            className="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 w-64 text-sm transition-all"
-                        />
-                        <Search className="absolute left-3.5 top-3 text-gray-400 w-4 h-4" />
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
+            <div className="p-4 md:p-6">
+                <div className="flex items-center justify-between gap-4">
+                    {/* Left: Mobile Menu + Title/Description */}
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <MobileMenuButton />
+                        <div className="min-w-0">
+                            <h1 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight truncate">{title}</h1>
+                            <p className="text-xs md:text-sm text-gray-600 mt-0.5 truncate">{description}</p>
+                        </div>
                     </div>
-                    <button className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors relative">
-                        <Bell className="text-gray-600 w-5 h-5" />
-                        <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-purple-600 rounded-full"></span>
-                    </button>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src="https://i.pravatar.cc/150?u=sarah"
-                        alt="Profile"
-                        className="w-10 h-10 rounded-full ring-2 ring-gray-200"
-                    />
+
+                    {/* Right: Search + Actions */}
+                    <div className="flex items-center gap-2 md:gap-4">
+                        {/* Search - hidden on mobile */}
+                        <div className="hidden sm:flex items-center bg-gray-50 rounded-lg px-3 py-2 w-64">
+                            <Search className="w-4 h-4 text-gray-400 mr-2" />
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                className="bg-transparent border-none outline-none text-sm w-full text-gray-700 placeholder-gray-400"
+                            />
+                        </div>
+
+                        {/* Notification */}
+                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Notifications">
+                            <Bell className="w-5 h-5 text-gray-600" />
+                        </button>
+
+                        {/* Profile */}
+                        <button className="flex items-center gap-2 hover:bg-gray-100 rounded-lg p-1.5 md:p-2 transition-colors">
+                            <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
+                                <User className="w-4 h-4 text-white" />
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>

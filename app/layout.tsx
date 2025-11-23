@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
+import { SidebarProvider } from "@/contexts/SidebarContext";
+import MainContent from "@/components/MainContent";
 
 export const metadata: Metadata = {
   title: "100x Marketer",
@@ -15,12 +17,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-gray-50">
-        <div className="flex h-screen bg-gray-50">
-          <Sidebar />
-          <main className="ml-64 flex-1 overflow-y-auto">
-            {children}
-          </main>
-        </div>
+        <SidebarProvider>
+          <div className="flex h-screen bg-gray-50">
+            <Sidebar />
+            <MainContent>
+              {children}
+            </MainContent>
+          </div>
+        </SidebarProvider>
       </body>
     </html>
   );

@@ -69,11 +69,11 @@ export default function ComparisonsPage() {
                 description="Side-by-side comparison to help you choose the right tool"
             />
 
-            <div className="p-8">
+            <div className="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8">
                 {/* Tool Selector */}
-                <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-8">
-                    <h3 className="font-bold text-gray-900 mb-4">Select Tools to Compare</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="bg-white p-4 sm:p-6 rounded-xl border border-gray-200 shadow-sm mb-6 sm:mb-8">
+                    <h3 className="font-bold text-gray-900 mb-4 text-lg">Select Tools to Compare</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4 sm:mb-8">
                         <div className="flex flex-col gap-2">
                             <label className="text-xs font-semibold text-gray-700">Tool 1</label>
                             <div className="relative">
@@ -118,62 +118,64 @@ export default function ComparisonsPage() {
 
                 {/* Comparison Table */}
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="bg-gray-50 border-b border-gray-200">
-                                <th className="p-6 text-left w-1/4 font-bold text-gray-500 text-sm uppercase tracking-wider">Features</th>
-                                {tools.map((tool) => (
-                                    <th key={tool.name} className="p-6 text-left w-1/4">
-                                        <div className="flex flex-col items-center">
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img src={tool.image} alt={tool.name} className="w-16 h-16 rounded-xl object-cover mb-3 shadow-sm" />
-                                            <h4 className="font-bold text-gray-900 text-lg mb-1">{tool.name}</h4>
-                                            <div className="flex items-center gap-1 mb-3">
-                                                <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                                <span className="font-bold text-gray-900">{tool.rating}</span>
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-[800px]">
+                            <thead>
+                                <tr className="bg-gray-50 border-b border-gray-200">
+                                    <th className="p-4 sm:p-6 text-left w-1/4 font-bold text-gray-500 text-xs sm:text-sm uppercase tracking-wider sticky left-0 bg-gray-50 z-10">Features</th>
+                                    {tools.map((tool) => (
+                                        <th key={tool.name} className="p-4 sm:p-6 text-left w-1/4">
+                                            <div className="flex flex-col items-center">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img src={tool.image} alt={tool.name} className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-cover mb-3 shadow-sm" />
+                                                <h4 className="font-bold text-gray-900 text-base sm:text-lg mb-1">{tool.name}</h4>
+                                                <div className="flex items-center gap-1 mb-3">
+                                                    <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
+                                                    <span className="font-bold text-gray-900 text-sm">{tool.rating}</span>
+                                                </div>
+                                                <button className="w-full bg-purple-600 text-white py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-purple-700 transition-colors">
+                                                    Try Free
+                                                </button>
                                             </div>
-                                            <button className="w-full bg-purple-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-purple-700 transition-colors">
-                                                Try Free
-                                            </button>
-                                        </div>
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {features.map((feature) => (
-                                <tr key={feature.key} className="hover:bg-gray-50 transition-colors">
-                                    <td className="p-6 text-sm font-bold text-gray-700 bg-gray-50/50">{feature.name}</td>
-                                    {tools.map((tool) => {
-                                        // @ts-expect-error - dynamic access
-                                        const value = tool[feature.key];
-                                        return (
-                                            <td key={tool.name} className="p-6 text-center text-sm text-gray-600">
-                                                {typeof value === 'boolean' ? (
-                                                    value ? (
-                                                        <Check className="w-5 h-5 text-green-500 mx-auto" />
-                                                    ) : (
-                                                        <X className="w-5 h-5 text-gray-300 mx-auto" />
-                                                    )
-                                                ) : (
-                                                    <span className="font-medium">{value}</span>
-                                                )}
-                                            </td>
-                                        );
-                                    })}
+                                        </th>
+                                    ))}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                                {features.map((feature) => (
+                                    <tr key={feature.key} className="hover:bg-gray-50 transition-colors">
+                                        <td className="p-4 sm:p-6 text-xs sm:text-sm font-bold text-gray-700 bg-gray-50/50 sticky left-0 z-10">{feature.name}</td>
+                                        {tools.map((tool) => {
+                                            // @ts-expect-error - dynamic access
+                                            const value = tool[feature.key];
+                                            return (
+                                                <td key={tool.name} className="p-4 sm:p-6 text-center text-xs sm:text-sm text-gray-600">
+                                                    {typeof value === 'boolean' ? (
+                                                        value ? (
+                                                            <Check className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mx-auto" />
+                                                        ) : (
+                                                            <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300 mx-auto" />
+                                                        )
+                                                    ) : (
+                                                        <span className="font-medium">{value}</span>
+                                                    )}
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 {/* Similar Products */}
-                <div className="mt-12">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">Similar Products You Might Like</h3>
-                    <div className="grid grid-cols-4 gap-6">
+                <div className="mt-8 sm:mt-12">
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Similar Products You Might Like</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                         {[1, 2, 3, 4].map((i) => (
                             <div key={i} className="bg-white p-4 rounded-xl border border-gray-200 flex items-center gap-4 hover:shadow-md transition-all cursor-pointer">
-                                <div className="w-12 h-12 bg-gray-100 rounded-lg"></div>
+                                <div className="w-12 h-12 bg-gray-100 rounded-lg flex-shrink-0"></div>
                                 <div>
                                     <h4 className="font-bold text-gray-900 text-sm">Writesonic</h4>
                                     <p className="text-xs text-gray-500">AI Writer</p>
